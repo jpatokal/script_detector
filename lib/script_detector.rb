@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'lib/chinese_detector.rb'
+require File.dirname(__FILE__) + '/chinese_detector.rb'
 
 class String
   include ChineseDetector
