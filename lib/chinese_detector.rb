@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module ChineseDetector
+  private
 
   def traditional_chinese_regex
     /#{traditional_chinese_characters.join('|')}/

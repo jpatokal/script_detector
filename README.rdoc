@@ -8,10 +8,16 @@ korean?:: Returns true if the string contains specifically Korean (hangul) chara
 
 Once a script has been identified as Chinese, two further methods are provided for determining the script subtype:
 
-traditional_chinese?:: Return true if the string contains traditional Chinese characters
-simplified_chinese?:: Return true if the string contains simplified Chinese characters
+traditional_chinese?:: Return true if the string contains traditional Chinese characters (繁體字)
+simplified_chinese?:: Return true if the string contains simplified Chinese characters (简体字)
 
-It is important to understand that this _requires_ long sections of text to work reliably, since a single character or even several characters may be valid Japanese, traditional Chinese and simplified Chinese simultaneously.  Details: http://unicode.org/faq/han_cjk.html#4
+There is also a helper method that combines these to produce human-readable output:
+
+identify_script:: Try to detect script and return one of "Japanese", "Korean", "Traditional Chinese", "Simplified Chinese", "Ambiguous Chinese" or "Unknown"
+
+It is important to understand that this _requires_ long sections of text to work reliably, since a single character or even several characters may be valid Japanese, traditional Chinese and simplified Chinese simultaneously.  Likewise, the string  東京 (Tokyo) will return "false" for Japanese and "true" for traditional Chinese, since those two _kanji_ are also valid traditional Chinese.
+
+Details: http://unicode.org/faq/han_cjk.html#4
 
 == Example
 
@@ -27,6 +33,8 @@ It is important to understand that this _requires_ long sections of text to work
   => false
   > string.korean?
   => false
+  > string.identify_script
+  => "Traditional Chinese"
 
 == Implementation
 
