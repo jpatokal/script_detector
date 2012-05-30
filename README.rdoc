@@ -1,9 +1,42 @@
 = script_detector
 
-Description goes here.
+This is a simple utility library for trying to figure out what CJK script a string is in.  Three core methods that extend String are provided:
+
+chinese?:: Returns true if the string contains Chinese characters _and_ no Japanese or Korean characters
+japanese?:: Returns true if the string contains specifically Japanese (hiragana or katakana) characters
+korean?:: Returns true if the string contains specifically Korean (hangul) characters
+
+Once a script has been identified as Chinese, two further methods are provided for determining the script subtype:
+
+traditional_chinese?:: Return true if the string contains traditional Chinese characters
+simplified_chinese?:: Return true if the string contains simplified Chinese characters
+
+It is important to understand that this _requires_ long sections of text to work reliably, since a single character or even several characters may be valid Japanese, traditional Chinese and simplified Chinese simultaneously.  Details: http://unicode.org/faq/han_cjk.html#4
+
+== Example
+
+  > p string
+  => "我的氣墊船充滿了鱔魚."
+  > string.chinese?
+  => true
+  > string.traditional_chinese?
+  => true
+  > string.simplified_chinese?
+  => false
+  > string.japanese?
+  => false
+  > string.korean?
+  => false
+
+== Implementation
+
+Ruby 1.9 Oniguruma regular expressions are used to determine which script is in use.  The lists of simplified and traditional Chinese characters have been drawn from the Unihan database's +Unihan_Variants.txt+ data set, using the assumption that any character with a +kTraditionalVariant+ is simplified and visa versa.
+
+* Details: http://www.unicode.org/reports/tr38/
+* Download: http://unicode.org/Public/UNIDATA/Unihan.zip
 
 == Contributing to script_detector
- 
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
 * Fork the project.
