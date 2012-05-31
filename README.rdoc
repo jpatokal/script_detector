@@ -1,13 +1,10 @@
 = script_detector
 
-This is a simple utility library for trying to figure out what CJK script a string is in.  Three core methods that extend String are provided:
+This is a simple utility library for Ruby 1.9+ for trying to figure out which CJK script a string is in.  Five boolean methods that extend String are provided:
 
-chinese?:: Returns true if the string contains Chinese characters _and_ no Japanese or Korean characters
 japanese?:: Returns true if the string contains specifically Japanese (hiragana or katakana) characters
 korean?:: Returns true if the string contains specifically Korean (hangul) characters
-
-Once a script has been identified as Chinese, two further methods are provided for determining the script subtype:
-
+chinese?:: Returns true if the string contains Chinese characters _and_ no Japanese or Korean characters
 traditional_chinese?:: Return true if the string contains traditional Chinese characters (繁體字)
 simplified_chinese?:: Return true if the string contains simplified Chinese characters (简体字)
 
@@ -15,9 +12,7 @@ There is also a helper method that combines these to produce human-readable outp
 
 identify_script:: Try to detect script and return one of "Japanese", "Korean", "Traditional Chinese", "Simplified Chinese", "Ambiguous Chinese" or "Unknown"
 
-It is important to understand that this _requires_ long sections of text to work reliably, since a single character or even several characters may be valid Japanese, traditional Chinese and simplified Chinese simultaneously.  Likewise, the string  東京 (Tokyo) will return "false" for Japanese and "true" for traditional Chinese, since those two _kanji_ are also valid traditional Chinese.
-
-Details: http://unicode.org/faq/han_cjk.html#4
+It is important to understand that this *requires* long sections of text to work reliably, since a single character or even several characters may be valid Japanese, traditional Chinese and simplified Chinese simultaneously.  (See the {Unicode CJK FAQ}[http://unicode.org/faq/han_cjk.html#4] for a longer explanation.)  Attempting to use this library on short strings may produce misleading results: for example, the string  東京 (Tōkyō) will return "false" for Japanese and "true" for Chinese, since those two _kanji_ are also valid traditional Chinese.  Likewise, the string 你好 (nǐ hǎo) will return "false" for both simplified and traditional Chinese, since neither character is identifiably simplified nor traditional.
 
 == Example
 
@@ -38,10 +33,9 @@ Details: http://unicode.org/faq/han_cjk.html#4
 
 == Implementation
 
-Ruby 1.9 Oniguruma regular expressions are used to determine which script is in use.  The lists of simplified and traditional Chinese characters have been drawn from the Unihan database's +Unihan_Variants.txt+ data set, using the assumption that any character with a +kTraditionalVariant+ is simplified and visa versa.
+Ruby 1.9 {Oniguruma regular expressions}[http://www.geocities.jp/kosako3/oniguruma/doc/RE.txt] are used to determine which CJK script is in use.  The lists of simplified and traditional Chinese characters have been drawn from the {Unihan database}[http://www.unicode.org/reports/tr38/]'s +Unihan_Variants.txt+ data set ({download}[http://unicode.org/Public/UNIDATA/Unihan.zip]), using the assumption that any character with a +kTraditionalVariant+ is simplified and visa versa.
 
-* Details: http://www.unicode.org/reports/tr38/
-* Download: http://unicode.org/Public/UNIDATA/Unihan.zip
+For simplicity and speed, only characters in the Basic Multilingual Plane (U+0000-FFFF) are included in the tests, but this is unlikely to be a problem in practice since even documents using the excluded characters in Plane 2 (U+20000-2FFFF) will mix in characters from BMP.
 
 == Contributing to script_detector
 
@@ -55,6 +49,5 @@ Ruby 1.9 Oniguruma regular expressions are used to determine which script is in 
 
 == Copyright
 
-Copyright (c) 2012 Jani Patokallio. See LICENSE.txt for
-further details.
+Copyright (c) 2012 Jani Patokallio, Lonely Planet Publications. See LICENSE.txt for further details.
 
